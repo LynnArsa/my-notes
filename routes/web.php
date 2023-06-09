@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AddController;
+use App\Http\Controllers\HomepageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +15,7 @@ use App\Http\Controllers\AddController;
 */
 
 //View
-Route::get('/', function () {
+Route::get('/homepage', function () {
     return view('home');
 });
 
@@ -23,6 +23,9 @@ Route::get('/', function () {
 // my-notes/add == '/add'
 
 //Controllers
-Route::get('/add', [AddController::class, 'index']);
+// Route::get('/add', [AddController::class, 'index']);
+
+Route::get('/homepage', [HomepageController::class, 'index']);
+
 
 
