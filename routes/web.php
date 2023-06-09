@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AddController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//View
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+
+// my-notes.com == '/'
+// my-notes/add == '/add'
+
+//Controllers
+Route::get('/add', [AddController::class, 'index']);
 
 
