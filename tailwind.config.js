@@ -6,7 +6,16 @@ module.exports = {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'poppins': ['Poppins'],
+     }
+    },
+    colors: {
+      'primary': '#E49F4E',
+      'secondary': '#FCB660',
+      'body': '#F6F6F6',
+    },
   },
   plugins: [],
 }

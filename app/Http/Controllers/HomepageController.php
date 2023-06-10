@@ -11,7 +11,6 @@ class HomepageController extends Controller
     public function index(): View
     {
         $notes = DB::select('select * from notes');
- 
         return view('home', ['notes' => $notes]);
     }
 }

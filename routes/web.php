@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\AddController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,13 @@ use App\Http\Controllers\HomepageController;
 |
 */
 
-//View
-Route::get('/homepage', function () {
+//Send back to View
+Route::get('/', function () {
     return view('home');
+});
+
+Route::get('/add', function () {
+    return view('add');
 });
 
 // my-notes.com == '/'
@@ -25,7 +30,9 @@ Route::get('/homepage', function () {
 //Controllers
 // Route::get('/add', [AddController::class, 'index']);
 
-Route::get('/homepage', [HomepageController::class, 'index']);
+Route::get('/', [HomepageController::class, 'index']);
+
+Route::get('/add', [AddController::class, 'index']);
 
 
 
