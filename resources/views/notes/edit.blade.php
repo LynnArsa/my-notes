@@ -8,35 +8,36 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-    Hello please create note here
-<form method="POST">
+    <p>Hello This is Edit Page</p>
+<form method="POST" action="{{ route('notes.edit', $note->id) }}">
+
     @csrf
+    @method('PUT')
 
     @if ($errors->any())
-        <div>
-            <div>
-                <ul>
-                    @foreach ($errors->all() as $item)
-                        <li>{{ $item }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
+    <div>
+        <ul>
+            @foreach ($errors->all() as $item)
+                <li>{{ $item }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
+
 
     <div>
     <label>Title</label>
-        <input type="text" name="title" placeholder="Title">
+        <input type="text" name="title" value="{{ $note->title }}" placeholder="Title">
     </div>
     <div>
         <label>Body</label>
-        <input type="text" name="body" placeholder="Body">
+        <input type="text" name="body" value="{{ $note->body }}" placeholder="Body">
     </div>
     <div>
         <button type="submit">Save Note</button>
     </div>
-    @yield('content')
 </form>
 
 </body>
 </html>
+

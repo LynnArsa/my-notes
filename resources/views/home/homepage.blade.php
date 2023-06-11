@@ -8,26 +8,81 @@
     @vite('resources/css/app.css')
 </head>
 <body class="font-poppins">
+    
     <h1 class="text-4xl font-bold mb-4">Welcome to the Notes App</h1>
-<div class="flex flex-row">
-    <div class="container w-1/2">
-        @foreach ($notes as $note)
-        <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary">
-            <p class="font-bold text-2xl"> {{ $note->title }} </p><br>    
-            {{ $note->body }} <br>
-            {{ $note->date}} <br>
-        </div>
-        @endforeach
-    </div>
-    <div class="container w-1/2">
-        <div>
-        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-        <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_ShrsmB.json"  background="transparent"  speed="1"  style="width: 500px; height: 500px;"  loop  autoplay></lottie-player>
-        </div>
-    </div>
-</div>
+    <div class="flex flex-row">
+        <div class="container w-1/2">
 
+            @foreach ($notes as $note)
+                <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary">
+                    <p class="font-bold text-2xl"> {{ $note->title }} </p><br>    
+                    {{ $note->body }} <br>
+                    {{ $note->date}} <br>
+                </div>
+            @endforeach
 
-    <script src="{{ asset('js/app.js') }}"></script>
+        </div>
+
+        <div class="container w-1/2" id="rightContainer">
+            <div>
+                <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+                <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_ShrsmB.json"  background="transparent"  speed="1"  style="width: 500px; height: 500px;"  loop  autoplay></lottie-player>
+            </div>
+            
+            <div id="rightContent">
+                <!-- The content will be dynamically added here -->
+            </div>
+
+            <div class="flex flex-col float-right">
+                <button>
+                <a href="{{ url('edit') }}">
+                    <img src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Edits.png">
+                </a>
+                </button>
+                <button>
+                    <a href="{{ url('add') }}">
+                        <img src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Adds.png">
+                    </a>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="{{ asset('js/app.js') }}"></script> -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bgBodyElements = document.querySelectorAll(".bg-body");
+            const rightContent = document.getElementById("rightContent");
+            let selectedElement = null;
+
+            bgBodyElements.forEach(function(element) {
+                element.addEventListener("click", function() {
+                    // Remove the previous active class from the previously selected element
+                    if (selectedElement !== null) {
+                        selectedElement.classList.remove("bg-secondary");
+                    }
+
+                    // Clone the clicked content
+                    const clone = this.cloneNode(true);
+                    
+                    // Remove the hover effect from the cloned element
+                    clone.classList.remove("hover:bg-secondary");
+
+                    // Remove any existing content in the right container
+                    while (rightContent.firstChild) {
+                        rightContent.removeChild(rightContent.firstChild);
+                    }
+
+                    // Append the cloned content to the right container
+                    rightContent.appendChild(clone);
+
+                    // Add the active class to the clicked element
+                    this.classList.add("bg-secondary");
+                    selectedElement = this;
+                });
+            });
+        });
+
+    </script>
 </body>
 </html>

@@ -22,8 +22,12 @@ Route::get('/', function () {
 
 Route::get('/homepage', [HomepageController::class, 'index'])->name('home.homepage');
 
-Route::get('/add', [AddController::class, 'create'])->name('notes.create'); // Assign a unique name
+// Add
+Route::get('/add', [AddController::class, 'create'])->name('notes.create');
 Route::post('/add', [AddController::class, 'store']);
+
+// Edit
+Route::get('/edit', [AddController::class, 'edit'])->name('notes.edit');
 
 
 
