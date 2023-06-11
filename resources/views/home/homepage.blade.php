@@ -11,7 +11,7 @@
     
     <h1 class="text-4xl font-bold mb-4">Welcome to the Notes App</h1>
     <div class="flex flex-row">
-        <div class="container w-1/2">
+        <div class="container w-1/2  flex flex-col-reverse">
 
             @foreach ($notes as $note)
                 <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary">
