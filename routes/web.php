@@ -17,22 +17,16 @@ use App\Http\Controllers\AddController;
 
 //Send back to View
 Route::get('/', function () {
-    return view('home');
+    return view('homepage');
 });
 
-Route::get('/add', function () {
-    return view('add');
-});
+Route::get('/homepage', [HomepageController::class, 'index']);
 
-// my-notes.com == '/'
-// my-notes/add == '/add'
 
-//Controllers
-// Route::get('/add', [AddController::class, 'index']);
+Route::post('/add', [AddController::class, 'store']);
+Route::get('/add', [AddController::class, 'create'])->name('home.homepage');
 
-Route::get('/', [HomepageController::class, 'index']);
 
-Route::get('/add', [AddController::class, 'index']);
 
 
 

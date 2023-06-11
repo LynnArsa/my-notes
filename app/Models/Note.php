@@ -11,7 +11,8 @@ class Note extends Model
 
     protected $fillable = [
         'title',
-        'body',
-        'date'
+        'body'
     ];
+    protected $table = 'notes';
+    public $timestamps = false;
 }

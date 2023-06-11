@@ -2,14 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Models\Note;
 
 class AddController extends Controller
 {
-    public function index(): View 
+    public function create()
     {
-        return view('add');
+        return view('notes.add');
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+        ]);
+    
+        Note::create($validatedData);
+    
+        return redirect()->route('home.homepage')->with('success', 'Note created successfully.');
     }
 }
+
