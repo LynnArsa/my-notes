@@ -35,7 +35,7 @@
 
             <div class="flex flex-col float-right">
                 <button>
-                <a href="{{ url('edit') }}">
+                <a href="{{ url('edit/{note}') }}">
                     <img src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Edits.png">
                 </a>
                 </button>

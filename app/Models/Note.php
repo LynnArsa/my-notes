@@ -9,10 +9,12 @@ class Note extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'notes_id';
     protected $fillable = [
         'title',
         'body'
     ];
+    
     protected $table = 'notes';
     public $timestamps = false;
 }

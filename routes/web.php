@@ -27,7 +27,10 @@ Route::get('/add', [AddController::class, 'create'])->name('notes.create');
 Route::post('/add', [AddController::class, 'store']);
 
 // Edit
-Route::get('/edit', [AddController::class, 'edit'])->name('notes.edit');
+Route::get('/edit/{note}', [AddController::class, 'edit'])->name('notes.edit');
+
+
+
 
 
 
