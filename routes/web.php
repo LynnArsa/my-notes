@@ -20,11 +20,10 @@ Route::get('/', function () {
     return view('homepage');
 });
 
-Route::get('/homepage', [HomepageController::class, 'index']);
+Route::get('/homepage', [HomepageController::class, 'index'])->name('home.homepage');
 
-
+Route::get('/add', [AddController::class, 'create'])->name('notes.create'); // Assign a unique name
 Route::post('/add', [AddController::class, 'store']);
-Route::get('/add', [AddController::class, 'create'])->name('home.homepage');
 
 
 

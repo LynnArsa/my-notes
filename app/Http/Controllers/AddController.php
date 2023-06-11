@@ -17,6 +17,9 @@ class AddController extends Controller
         $validatedData = $request->validate([
             'title' => 'required',
             'body' => 'required',
+        ], [
+            'title.required' => 'Title cannot be empty!',
+            'body.required' => 'Body cannot be empty!',
         ]);
     
         Note::create($validatedData);

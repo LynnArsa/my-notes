@@ -9,9 +9,21 @@
 </head>
 <body>
     Hello please create note here
-<form method="post" action="">
+<form method="post">
     @csrf
-    <!-- @method('PUT') -->
+
+    @if ($errors->any())
+        <div>
+            <div>
+                <ul>
+                    @foreach ($errors->all() as $item)
+                        <li>{{ $item }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
+
     <div>
     <label>Title</label>
         <input type="text" name="title" placeholder="Title">
