@@ -30,7 +30,7 @@
             </div>
             
             <div id="rightContent">
-                <!-- The content will be dynamically added here -->
+                
             </div>
 
             <div class="flex flex-col float-right">
@@ -78,6 +78,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Append the fetched content to the right container
                     rightContent.innerHTML = content;
                 })
+
+                
+
                 .catch(error => {
                     console.error('Error:', error);
                 });
