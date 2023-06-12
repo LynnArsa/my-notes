@@ -43,6 +43,7 @@
                 </button>
                 <div id="saveButtonContainer">
                   <button id="saveButton" type="button">Save</button>
+                  <button id="deleteButton" type="button">Delete</button>
                 </div>
 
             </div>
@@ -91,6 +92,57 @@ document.addEventListener("DOMContentLoaded", function() {
         clearRightContent();
         const noteElements = createNoteElements(note);
         noteElements.forEach(element => rightContent.appendChild(element));
+
+        // Reattach event listeners to the new elements
+        const titleElement = rightContent.querySelector(".font-bold");
+        const bodyElement = rightContent.querySelector("div:nth-child(3)");
+        titleElement.addEventListener("input", handleNoteInput);
+        bodyElement.addEventListener("input", handleNoteInput);
+      })
+      .catch(error => console.error("Error:", error));
+  }
+
+  function saveNoteContent(noteId, title, body) {
+    fetch(`/notes/${noteId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": '{{ csrf_token() }}',
+      },
+      body: JSON.stringify({ title, body }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // Update the note data on the client-side
+        const titleElement = rightContent.querySelector(".font-bold");
+        const bodyElement = rightContent.querySelector("div:nth-child(3)");
+
+        titleElement.textContent = data.title;
+        bodyElement.textContent = data.body;
+
+        // Perform any necessary actions after saving
+      })
+      .catch(error => console.error("Error:", error));
+  }
+
+  function deleteNoteElement(noteId) {
+    fetch(`/notes/${noteId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": '{{ csrf_token() }}',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // Remove the note element from the sidebar
+        const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+        noteElement.remove();
+
+        // Clear the right content
+        clearRightContent();
       })
       .catch(error => console.error("Error:", error));
   }
@@ -101,10 +153,36 @@ document.addEventListener("DOMContentLoaded", function() {
     fetchNoteContent(noteId);
   }
 
+  function handleNoteInput() {
+    const saveButton = document.getElementById("saveButton");
+    saveButton.disabled = false;
+  }
+
+  function handleDeleteButtonClick() {
+    if (selectedElement !== null) {
+      const noteId = selectedElement.dataset.noteId;
+      deleteNoteElement(noteId);
+    }
+  }
+
   bgBodyElements.forEach(element => {
     element.addEventListener("click", () => handleNoteClick(element));
   });
+
+  deleteButton.addEventListener("click", handleDeleteButtonClick);
+
+  const saveButton = document.getElementById("saveButton");
+  saveButton.addEventListener("click", () => {
+    if (selectedElement !== null) {
+      const noteId = selectedElement.dataset.noteId;
+      const editedTitle = rightContent.querySelector(".font-bold").textContent;
+      const editedBody = rightContent.querySelector("div:nth-child(3)").textContent;
+      saveNoteContent(noteId, editedTitle, editedBody);
+      saveButton.disabled = true;
+    }
   });
+});
+
 </script>
 </body>
 </html>

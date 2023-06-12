@@ -17,7 +17,9 @@ use App\Http\Controllers\AddController;
 
 // Send back to View
 Route::get('/homepage', [HomepageController::class, 'index'])->name('home.homepage');
-Route::get('/notes/{note}', [HomepageController::class, 'show']);
+Route::get('/notes/{note}', [HomepageController::class, 'show'])->name('notes.show');
+Route::put('/notes/{note}', [HomepageController::class, 'update'])->name('notes.update');
+Route::delete('/notes/{note}', [HomepageController::class, 'delete'])->name('notes.delete');
 
 // Add
 Route::get('/add', [AddController::class, 'create'])->name('notes.create');

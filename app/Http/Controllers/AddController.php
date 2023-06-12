@@ -26,13 +26,6 @@ class AddController extends Controller
     
         return redirect()->route('home.homepage')->with('success', 'Note created successfully.');
     }
-
-    // public function edit(Note $note)
-    // {
-    //     $note = Note::findOrFail($id);
-    //     return view('notes.edit', compact('note'));
-    // }
     
-
 }
 
