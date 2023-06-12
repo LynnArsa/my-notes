@@ -37,11 +37,6 @@
 
             <div class="flex flex-col float-right">
                 <button>
-                <a href="{{ url('edit/{note}') }}">
-                    <img src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Edits.png">
-                </a>
-                </button>
-                <button>
                     <a href="{{ url('add') }}">
                         <img src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Adds.png">
                     </a>
@@ -55,29 +50,16 @@
     </div>
 
     <script>
-document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", function() {
   const bgBodyElements = document.querySelectorAll(".bg-body");
   const rightContent = document.getElementById("rightContent");
   let selectedElement = null;
-
-  function saveNoteContent(noteId, content) {
-    fetch(`/notes/${noteId}/update`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": '{{ csrf_token() }}',
-      },
-      body: JSON.stringify({ content }),
-    })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error("Error:", error));
-  }
 
   function createNoteElements(note) {
     const titleElement = document.createElement("p");
     titleElement.classList.add("font-bold", "text-2xl");
     titleElement.textContent = note.title;
+    titleElement.contentEditable = "true";
 
     const dateElement = document.createElement("div");
     dateElement.classList.add("mb-4");
@@ -122,16 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
   bgBodyElements.forEach(element => {
     element.addEventListener("click", () => handleNoteClick(element));
   });
-
-  const saveButton = document.getElementById("saveButton");
-  saveButton.addEventListener("click", () => {
-    if (selectedElement !== null) {
-      const noteId = selectedElement.dataset.noteId;
-      const editedContent = rightContent.querySelector("[contenteditable='true']").textContent;
-      saveNoteContent(noteId, editedContent);
-    }
   });
-});
 
     </script>
 </body>

@@ -28,5 +28,22 @@ class HomepageController extends Controller
         return response()->json($noteContent);
     }
     
+    public function edit(Note $note)
+    {
+        $note = Note::findOrFail($id);
+        return view('notes.edit', compact('note'));
+    }
     
+    public function update(Request $request, $id)
+    {
+        $note = Note::findOrFail($id);
+        $note->title = $request->input('title');
+        $note->body = $request->input('body');
+
+        $note->save();
+    
+        return redirect()->route('home.homepage')->with('success', 'Note updated successfully.');
+    }
+
+
 }
