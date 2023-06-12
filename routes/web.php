@@ -16,10 +16,6 @@ use App\Http\Controllers\AddController;
 */
 
 // Send back to View
-Route::get('/', function () {
-    return view('homepage');
-});
-
 Route::get('/homepage', [HomepageController::class, 'index'])->name('home.homepage');
 Route::get('/notes/{note}', [HomepageController::class, 'show']);
 
