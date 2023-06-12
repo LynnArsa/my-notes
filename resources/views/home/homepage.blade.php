@@ -13,13 +13,13 @@
     <div class="flex flex-row">
         <div class="container w-1/2  flex flex-col-reverse">
 
-            @foreach ($notes as $note)
-                <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary">
-                    <p class="font-bold text-2xl"> {{ $note->title }} </p><br>    
-                    {{ $note->body }} <br>
-                    {{ $note->date}} <br>
-                </div>
-            @endforeach
+        @foreach ($notes as $note)
+            <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary" data-note-id="{{ $note->notes_id }}">
+                <p class="font-bold text-2xl">{{ $note->title }}</p><br>
+                {{ $note->body }} <br>
+                {{ $note->date }} <br>
+            </div>
+        @endforeach
 
         </div>
 
@@ -48,41 +48,42 @@
         </div>
     </div>
 
-    <!-- <script src="{{ asset('js/app.js') }}"></script> -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const bgBodyElements = document.querySelectorAll(".bg-body");
-            const rightContent = document.getElementById("rightContent");
-            let selectedElement = null;
+document.addEventListener("DOMContentLoaded", function() {
+    const bgBodyElements = document.querySelectorAll(".bg-body");
+    const rightContent = document.getElementById("rightContent");
+    let selectedElement = null;
 
-            bgBodyElements.forEach(function(element) {
-                element.addEventListener("click", function() {
-                    // Remove the previous active class from the previously selected element
-                    if (selectedElement !== null) {
-                        selectedElement.classList.remove("bg-secondary");
-                    }
+    bgBodyElements.forEach(function(element) {
+        element.addEventListener("click", function() {
+            // Remove the previous active class from the previously selected element
+            if (selectedElement !== null) {
+                selectedElement.classList.remove("bg-secondary");
+            }
 
-                    // Clone the clicked content
-                    const clone = this.cloneNode(true);
-                    
-                    // Remove the hover effect from the cloned element
-                    clone.classList.remove("hover:bg-secondary");
+            // Add the active class to the clicked element
+            this.classList.add("bg-secondary");
+            selectedElement = this;
 
+            // Fetch the content from the server
+            const noteId = this.dataset.noteId;
+            fetch(`/notes/${noteId}`)
+                .then(response => response.text())
+                .then(content => {
                     // Remove any existing content in the right container
                     while (rightContent.firstChild) {
                         rightContent.removeChild(rightContent.firstChild);
                     }
 
-                    // Append the cloned content to the right container
-                    rightContent.appendChild(clone);
-
-                    // Add the active class to the clicked element
-                    this.classList.add("bg-secondary");
-                    selectedElement = this;
+                    // Append the fetched content to the right container
+                    rightContent.innerHTML = content;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-            });
         });
-
+    });
+});
     </script>
 </body>
 </html>
