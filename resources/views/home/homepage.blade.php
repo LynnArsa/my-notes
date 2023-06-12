@@ -6,6 +6,8 @@
     <title>Notes App - Home</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite('resources/css/app.css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 <body class="font-poppins">
     
@@ -15,7 +17,7 @@
 
         @foreach ($notes as $note)
             <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary" data-note-id="{{ $note->notes_id }}">
-                <p class="font-bold text-2xl">{{ $note->title }}</p><br>
+                <div class="font-bold text-2xl">{{ $note->title }}</div><br>
                 {{ $note->body }} <br>
                 {{ $note->date }} <br>
             </div>
@@ -44,49 +46,93 @@
                         <img src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Adds.png">
                     </a>
                 </button>
+                <div id="saveButtonContainer">
+                  <button id="saveButton" type="button">Save</button>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const bgBodyElements = document.querySelectorAll(".bg-body");
-    const rightContent = document.getElementById("rightContent");
-    let selectedElement = null;
+  const bgBodyElements = document.querySelectorAll(".bg-body");
+  const rightContent = document.getElementById("rightContent");
+  let selectedElement = null;
 
-    bgBodyElements.forEach(function(element) {
-        element.addEventListener("click", function() {
-            // Remove the previous active class from the previously selected element
-            if (selectedElement !== null) {
-                selectedElement.classList.remove("bg-secondary");
-            }
+  function saveNoteContent(noteId, content) {
+    fetch(`/notes/${noteId}/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": '{{ csrf_token() }}',
+      },
+      body: JSON.stringify({ content }),
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error("Error:", error));
+  }
 
-            // Add the active class to the clicked element
-            this.classList.add("bg-secondary");
-            selectedElement = this;
+  function createNoteElements(note) {
+    const titleElement = document.createElement("p");
+    titleElement.classList.add("font-bold", "text-2xl");
+    titleElement.textContent = note.title;
 
-            // Fetch the content from the server
-            const noteId = this.dataset.noteId;
-            fetch(`/notes/${noteId}`)
-                .then(response => response.text())
-                .then(content => {
-                    // Remove any existing content in the right container
-                    while (rightContent.firstChild) {
-                        rightContent.removeChild(rightContent.firstChild);
-                    }
+    const dateElement = document.createElement("div");
+    dateElement.classList.add("mb-4");
+    dateElement.textContent = note.date;
 
-                    // Append the fetched content to the right container
-                    rightContent.innerHTML = content;
-                })
+    const bodyElement = document.createElement("div");
+    bodyElement.textContent = note.body;
+    bodyElement.contentEditable = "true";
 
-                
+    return [titleElement, dateElement, bodyElement];
+  }
 
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-    });
+  function clearRightContent() {
+    rightContent.innerHTML = "";
+  }
+
+  function selectNoteElement(element) {
+    if (selectedElement !== null) {
+      selectedElement.classList.remove("bg-secondary");
+    }
+    element.classList.add("bg-secondary");
+    selectedElement = element;
+  }
+
+  function fetchNoteContent(noteId) {
+    fetch(`/notes/${noteId}`)
+      .then(response => response.json())
+      .then(note => {
+        clearRightContent();
+        const noteElements = createNoteElements(note);
+        noteElements.forEach(element => rightContent.appendChild(element));
+      })
+      .catch(error => console.error("Error:", error));
+  }
+
+  function handleNoteClick(element) {
+    selectNoteElement(element);
+    const noteId = element.dataset.noteId;
+    fetchNoteContent(noteId);
+  }
+
+  bgBodyElements.forEach(element => {
+    element.addEventListener("click", () => handleNoteClick(element));
+  });
+
+  const saveButton = document.getElementById("saveButton");
+  saveButton.addEventListener("click", () => {
+    if (selectedElement !== null) {
+      const noteId = selectedElement.dataset.noteId;
+      const editedContent = rightContent.querySelector("[contenteditable='true']").textContent;
+      saveNoteContent(noteId, editedContent);
+    }
+  });
 });
+
     </script>
 </body>
 </html>
