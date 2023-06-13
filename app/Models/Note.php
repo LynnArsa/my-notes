@@ -12,9 +12,15 @@ class Note extends Model
     protected $primaryKey = 'notes_id';
     protected $fillable = [
         'title',
-        'body'
+        'body',
+        'date'
     ];
     
     protected $table = 'notes';
     public $timestamps = false;
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

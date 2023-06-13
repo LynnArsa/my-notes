@@ -13,9 +13,11 @@ class HomepageController extends Controller
     // View
     public function index(): View
     {
-        $notes = Note::all();
-        return view('home.homepage', ['notes' => $notes]);
+        $user = Auth::user();
+        $notes = $user->notes()->orderByDesc('notes_id')->get(); // Order by 'id'
+        return view('home.homepage', compact('notes'));
     }
+    
 
     // View Note Details
     public function show($noteId)
