@@ -10,6 +10,19 @@
 
 </head>
 <body class="font-poppins">
+  
+<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+    <a class="dropdown-item" href="{{ route('logout') }}"
+       onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">
+        {{ __('Logout') }}
+    </a>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
+</div>
+
+
     
     <h1 class="text-4xl font-bold mb-4">Welcome to the Notes App</h1>
     <div class="flex flex-row">
@@ -42,8 +55,8 @@
                     </a>
                 </button>
                 <div id="saveButtonContainer">
-                  <button id="saveButton" type="button">Save</button>
-                  <button id="deleteButton" type="button">Delete</button>
+                    <button id="saveButton" type="button">Save</button>
+                    <button id="deleteButton" type="button">Delete</button>
                 </div>
 
             </div>
@@ -52,11 +65,11 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const bgBodyElements = document.querySelectorAll(".bg-body");
-  const rightContent = document.getElementById("rightContent");
-  let selectedElement = null;
+    const bgBodyElements = document.querySelectorAll(".bg-body");
+    const rightContent = document.getElementById("rightContent");
+    let selectedElement = null;
 
-  function createNoteElements(note) {
+function createNoteElements(note) {
     const titleElement = document.createElement("p");
     titleElement.classList.add("font-bold", "text-2xl");
     titleElement.textContent = note.title;

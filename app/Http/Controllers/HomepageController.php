@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Note;
@@ -13,14 +13,14 @@ class HomepageController extends Controller
     // View
     public function index(): View
     {
-        $notes = DB::select('select * from notes');
+        $notes = Note::all();
         return view('home.homepage', ['notes' => $notes]);
     }
 
     // View Note Details
     public function show($noteId)
     {
-        $note = Note::find($noteId);
+        $note = Note::findOrFail($noteId);
 
         $noteContent = [
             'title' => $note->title,
@@ -54,5 +54,17 @@ class HomepageController extends Controller
         $note->delete();
 
         return Redirect::route('home.homepage');
+    }
+
+    // Logout
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
     }
 }
