@@ -33,10 +33,24 @@
         <input type="text" name="body" placeholder="Body">
     </div>
     <div>
-        <button type="submit">Save Note</button>
+        <!-- <a href="{{ url('homepage') }}">
+        <button class="px-[55px] py-[16px] bg-red rounded-lg">
+          <img class="max-w-[22px] rotate-45" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Add%20White.png">
+          <p class="text-white font-bold">Cancel</p>
+        </button>
+        </a> -->
+        <button type="submit" class="px-[55px] py-[16px] bg-secondary rounded-lg">
+          <img class="max-w-[22px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Add%20White.png">
+          <p class="text-white font-bold">Add</p>
+        </button>
     </div>
     @yield('content')
 </form>
+
+<div class="flex items-center justify-center">
+    <div id="saveButtonContainer">
+    </div>
+  </div>
 
 </body>
 </html>

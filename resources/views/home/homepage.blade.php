@@ -3,65 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes App - Home</title>
+    <title>My Notes</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite('resources/css/app.css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
 <body class="font-poppins">
+
+  <nav>
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="justify-items-end">
+          <div class="flex-shrink-0">
+            <span class="font-bold text-[24px]">My <span class="text-secondary">Notes.</span></span>
+          </div>
+        </div>
+        <div class="ml-auto">
+          <a href="{{ route('logout') }}"
+             onclick="event.preventDefault();
+                          document.getElementById('logout-form').submit();">
+              <div>
+                <img> <p>Logout</p>
+              </div>
+          </a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST">
+              @csrf
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
   
-<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-    <a class="dropdown-item" href="{{ route('logout') }}"
-       onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();">
-        {{ __('Logout') }}
-    </a>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-        @csrf
-    </form>
-</div>
+  
 
-
-    
-    <h1 class="text-4xl font-bold mb-4">Welcome to the Notes App</h1>
     <div class="flex flex-row">
-        <div class="container w-1/2  flex flex-col-reverse">
+        <div class="container w-1/2  flex flex-col">
 
         @foreach ($notes as $note)
             <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary" data-note-id="{{ $note->notes_id }}">
                 <div class="font-bold text-2xl">{{ $note->title }}</div><br>
-                {{ $note->body }} <br>
-                {{ $note->date }} <br>
+                <div class="text-gray">{{ $note->date }}</div> <br>
+                <div class="text-gray truncate">{{ $note->body }}</div> <br>
             </div>
         @endforeach
 
         </div>
 
-        <div class="container w-1/2" id="rightContainer">
-            <div>
-                <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_ShrsmB.json"  background="transparent"  speed="1"  style="width: 500px; height: 500px;"  loop  autoplay></lottie-player>
-            </div>
+      <div class="container w-1/2">
+          <div class="m-16">
+            <img class="max-w-[400px] mx-auto" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Homepage.png">
+            <p class="font-bold text-center text-[32px] pt-12">Capture Your Ideas and Thoughts!</p>
+          </div>
+          <div id="rightContent">
             
-            <div id="rightContent">
-                
-            </div>
-
-            <div class="flex flex-col float-right">
-                <button>
-                    <a href="{{ url('add') }}">
-                        <img src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Adds.png">
-                    </a>
+          </div>
+          
+          <div class="flex float-right">
+            <a href="{{ url('add') }}">
+              <button class="bg-body rounded-full p-[20px] hover:bg-secondary">
+                    <img class="max-w-[31px] mx-auto" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Add%20Black.png">
+              </button>
+            </a>
+          </div>
+          
+            <div class="flex items-center justify-center">
+              <div id="saveButtonContainer">
+                <button id="deleteButton" type="button" class="px-[55px] py-[16px] bg-red rounded-lg">
+                  <img class="max-w-[22px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Delete.png">
+                  <p class="text-white font-bold">Delete</p>
                 </button>
-                <div id="saveButtonContainer">
-                    <button id="saveButton" type="button">Save</button>
-                    <button id="deleteButton" type="button">Delete</button>
-                </div>
-
+                <button id="saveButton" type="button" class="px-[55px] py-[16px] bg-secondary rounded-lg">
+                  <img class="max-w-[22px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Save.png">
+                  <p class="text-white font-bold">Save</p>
+                </button>
+              </div>
             </div>
         </div>
-    </div>
+      </div>
+    
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
