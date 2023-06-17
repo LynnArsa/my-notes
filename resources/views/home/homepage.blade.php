@@ -113,8 +113,10 @@ function createNoteElements(note) {
   function selectNoteElement(element) {
     if (selectedElement !== null) {
       selectedElement.classList.remove("bg-secondary");
+      selectedElement.classList.remove("text-white");
     }
     element.classList.add("bg-secondary");
+    element.classList.add("text-white");
     selectedElement = element;
   }
 
