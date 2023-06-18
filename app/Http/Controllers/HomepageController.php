@@ -15,7 +15,9 @@ class HomepageController extends Controller
     {
         $user = Auth::user();
         $notes = $user->notes()->orderByDesc('notes_id')->get(); // Order by 'id'
-        return view('home.homepage', compact('notes'));
+        return view('home.homepage')
+            ->with('notes', $notes)
+            ->with('user', $user);
     }
     
 

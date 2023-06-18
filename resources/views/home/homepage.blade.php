@@ -7,7 +7,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite('resources/css/app.css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
 </head>
 <body class="font-poppins">
 
@@ -20,6 +20,9 @@
           </div>
         </div>
         <div class="ml-auto">
+          <div>
+            <p>Hello, {{ $user->name }}</p>
+          </div>
           <a href="{{ route('logout') }}"
              onclick="event.preventDefault();
                           document.getElementById('logout-form').submit();">
@@ -44,7 +47,7 @@
             <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary" data-note-id="{{ $note->notes_id }}">
                 <div id="noteListTitle" class="font-bold text-2xl">{{ $note->title }}</div><br>
                 <div id="noteListDate" class="text-gray">{{ $note->date }}</div> <br>
-                <div id="noteListBody" class="text-gray truncate">{{ $note->body }}</div> <br>
+                <div id="noteListBody" class="text-gray truncate">{!! $note->body !!}</div> <br>
             </div>
         @endforeach
 
@@ -55,8 +58,11 @@
             <img class="max-w-[400px] mx-auto" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Homepage.png">
             <p class="font-bold text-center text-[32px] pt-12">Capture Your Ideas and Thoughts!</p>
           </div>
+          
           <div id="rightContent">
-            
+            <!-- <div id="editor">
+
+            </div> -->
           </div>
           
           <div class="flex float-right">
@@ -68,14 +74,18 @@
           </div>
           
             <div class="flex items-center justify-center">
-              <div id="saveButtonContainer">
+              <div id="buttonContainer" class="hidden">
                 <button id="deleteButton" type="button" class="px-[55px] py-[16px] bg-red rounded-lg">
-                  <img class="max-w-[22px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Delete.png">
-                  <p class="text-white font-bold">Delete</p>
+                  <div class="flex">
+                    <img class="w-[18px] h-[18px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Delete.png">
+                    <p class="text-white font-bold px-2">Delete</p>
+                  </div>
                 </button>
                 <button id="saveButton" type="button" class="px-[55px] py-[16px] bg-secondary rounded-lg">
-                  <img class="max-w-[22px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Save.png">
-                  <p class="text-white font-bold">Save</p>
+                  <div class="flex">
+                    <img class="w-[18px] h-[18px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Save.png">
+                    <p class="text-white font-bold px-2">Save</p>
+                  </div>
                 </button>
               </div>
             </div>
@@ -87,6 +97,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const bgBodyElements = document.querySelectorAll(".bg-body");
     const rightContent = document.getElementById("rightContent");
+    const buttonContainer = document.getElementById("buttonContainer");
     let selectedElement = null;
 
 function createNoteElements(note) {
@@ -103,7 +114,11 @@ function createNoteElements(note) {
     bodyElement.textContent = note.body;
     bodyElement.contentEditable = "true";
 
-    return [titleElement, dateElement, bodyElement];
+    const ckeditor = document.createElement("div");
+    bodyElement.setAttribute("id", "editor")
+    
+
+    return [titleElement, dateElement, bodyElement, ckeditor];
   }
 
   function clearRightContent() {
@@ -128,11 +143,20 @@ function createNoteElements(note) {
         const noteElements = createNoteElements(note);
         noteElements.forEach(element => rightContent.appendChild(element));
 
+        ClassicEditor
+          .create( document.querySelector( '#editor' ) )
+          .then( editor => {
+                  console.log( editor );
+          } )
+          .catch( error => {
+                  console.error( error );
+          } );
+
         // Reattach event listeners to the new elements
         const titleElement = rightContent.querySelector(".font-bold");
-        const bodyElement = rightContent.querySelector("div:nth-child(3)");
+        // const bodyElement = rightContent.querySelector("div:nth-child(3)");
         titleElement.addEventListener("input", handleNoteInput);
-        bodyElement.addEventListener("input", handleNoteInput);
+        // bodyElement.addEventListener("input", handleNoteInput);
         document.querySelector(`[data-note-id="${noteId}"] > #noteListDate`).innerText = note.date
       })
       .catch(error => console.error("Error:", error));
@@ -184,9 +208,12 @@ function createNoteElements(note) {
   }
 
   function handleNoteClick(element) {
+    buttonContainer.style.display = 'inline-block';
     selectNoteElement(element);
     const noteId = element.dataset.noteId;
     fetchNoteContent(noteId);
+
+
   }
 
   function handleNoteInput() {
@@ -213,11 +240,11 @@ function createNoteElements(note) {
       const noteId = selectedElement.dataset.noteId;
       const editedTitle = rightContent.querySelector(".font-bold").textContent;
       const editedDate = rightContent.querySelector(".font-bold").textContent;
-      const editedBody = rightContent.querySelector("div:nth-child(3)").textContent;
+      const editedBody = rightContent.querySelector("div > div > div > div > p").innerHTML;
 
       document.querySelector(`[data-note-id="${noteId}"] > #noteListTitle`).innerText = editedTitle
       document.querySelector(`[data-note-id="${noteId}"] > #noteListBody`).innerText = editedBody
-      saveNoteContent(noteId, editedTitle, editedBody);
+      saveNoteContent(noteId, editedTitle, editedBody); 
       fetchNoteContent(noteId)
       saveButton.disabled = true;
     }
