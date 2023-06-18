@@ -94,161 +94,165 @@
     
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const bgBodyElements = document.querySelectorAll(".bg-body");
-    const rightContent = document.getElementById("rightContent");
-    const buttonContainer = document.getElementById("buttonContainer");
-    let selectedElement = null;
+document.addEventListener("DOMContentLoaded", function () {
+      const bgBodyElements = document.querySelectorAll(".bg-body");
+      const rightContent = document.getElementById("rightContent");
+      const buttonContainer = document.getElementById("buttonContainer");
+      let selectedElement = null;
 
-function createNoteElements(note) {
-    const titleElement = document.createElement("p");
-    titleElement.classList.add("font-bold", "text-2xl");
-    titleElement.textContent = note.title;
-    titleElement.contentEditable = "true";
+      function createNoteElements(note) {
+            const titleElement = document.createElement("p");
+            titleElement.classList.add("font-bold", "text-2xl");
+            titleElement.textContent = note.title;
+            titleElement.contentEditable = "true";
 
-    const dateElement = document.createElement("div");
-    dateElement.classList.add("mb-4");
-    dateElement.textContent = note.date;
+            const dateElement = document.createElement("div");
+            dateElement.classList.add("mb-4");
+            dateElement.textContent = note.date;
 
-    const bodyElement = document.createElement("div");
-    bodyElement.textContent = note.body;
-    bodyElement.contentEditable = "true";
+            const bodyElement = document.createElement("div");
+            bodyElement.textContent = note.body;
+            bodyElement.contentEditable = "true";
 
-    const ckeditor = document.createElement("div");
-    bodyElement.setAttribute("id", "editor")
-    
+            const ckeditor = document.createElement("div");
+            bodyElement.setAttribute("id", "editor");
 
-    return [titleElement, dateElement, bodyElement, ckeditor];
-  }
+            return [titleElement, dateElement, bodyElement, ckeditor];
+      }
 
-  function clearRightContent() {
-    rightContent.innerHTML = "";
-  }
+      function clearRightContent() {
+            rightContent.innerHTML = "";
+      }
 
-  function selectNoteElement(element) {
-    if (selectedElement !== null) {
-      selectedElement.classList.remove("bg-secondary");
-      selectedElement.classList.remove("text-white");
-    }
-    element.classList.add("bg-secondary");
-    element.classList.add("text-white");
-    selectedElement = element;
-  }
+      function selectNoteElement(element) {
+            if (selectedElement !== null) {
+                  selectedElement.classList.remove("bg-secondary");
+                  selectedElement.classList.remove("text-white");
+            }
+            element.classList.add("bg-secondary");
+            element.classList.add("text-white");
+            selectedElement = element;
+      }
 
-  function fetchNoteContent(noteId) {
-    fetch(`/notes/${noteId}`)
-      .then(response => response.json())
-      .then(note => {
-        clearRightContent();
-        const noteElements = createNoteElements(note);
-        noteElements.forEach(element => rightContent.appendChild(element));
+      function fetchNoteContent(noteId) {
+            fetch(`/notes/${noteId}`)
+                  .then((response) => response.json())
+                  .then((note) => {
+                        clearRightContent();
+                        const noteElements = createNoteElements(note);
+                        noteElements.forEach((element) => rightContent.appendChild(element));
 
-        ClassicEditor
-          .create( document.querySelector( '#editor' ) )
-          .then( editor => {
-                  console.log( editor );
-          } )
-          .catch( error => {
-                  console.error( error );
-          } );
+                        ClassicEditor.create(document.querySelector("#editor"))
+                              .then((editor) => {
+                                    console.log(editor);
+                              })
+                              .catch((error) => {
+                                    console.error(error);
+                              });
 
-        // Reattach event listeners to the new elements
-        const titleElement = rightContent.querySelector(".font-bold");
-        // const bodyElement = rightContent.querySelector("div:nth-child(3)");
-        titleElement.addEventListener("input", handleNoteInput);
-        // bodyElement.addEventListener("input", handleNoteInput);
-        document.querySelector(`[data-note-id="${noteId}"] > #noteListDate`).innerText = note.date
-      })
-      .catch(error => console.error("Error:", error));
-  }
+                        // Reattach event listeners to the new elements
+                        const titleElement = rightContent.querySelector(".font-bold");
+                        // const bodyElement = rightContent.querySelector("div:nth-child(3)");
+                        titleElement.addEventListener("input", handleNoteInput);
+                        // bodyElement.addEventListener("input", handleNoteInput);
+                        document.querySelector(
+                              `[data-note-id="${noteId}"] > #noteListDate`
+                        ).innerText = note.date;
+                  })
+                  .catch((error) => console.error("Error:", error));
+      }
 
-  function saveNoteContent(noteId, title, body) {
-    fetch(`/notes/${noteId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": '{{ csrf_token() }}',
-      },
-      body: JSON.stringify({ title, body }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        // Update the note data on the client-side
-        const titleElement = rightContent.querySelector(".font-bold");
-        const bodyElement = rightContent.querySelector("div:nth-child(3)");
+      function saveNoteContent(noteId, title, body) {
+            fetch(`/notes/${noteId}`, {
+                  method: "PUT",
+                  headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                  },
+                  body: JSON.stringify({ title, body }),
+            })
+                  .then((response) => response.json())
+                  .then((data) => {
+                        console.log(data);
+                        // Update the note data on the client-side
+                        const titleElement = rightContent.querySelector(".font-bold");
+                        const bodyElement = rightContent.querySelector("div:nth-child(3)");
 
-        titleElement.textContent = data.title;
-        bodyElement.textContent = data.body;
+                        titleElement.textContent = data.title;
+                        bodyElement.textContent = data.body;
 
-        // Perform any necessary actions after saving
-      })
-      .catch(error => console.error("Error:", error));
-  }
+                        // Perform any necessary actions after saving
+                  })
+                  .catch((error) => console.error("Error:", error));
+      }
 
-  function deleteNoteElement(noteId) {
-    fetch(`/notes/${noteId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": '{{ csrf_token() }}',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        // Remove the note element from the sidebar
-        const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
-        noteElement.remove();
+      function deleteNoteElement(noteId) {
+            fetch(`/notes/${noteId}`, {
+                  method: "DELETE",
+                  headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                  },
+            })
+                  .then((response) => response.json())
+                  .then((data) => {
+                        console.log(data);
+                        // Remove the note element from the sidebar
+                        const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+                        noteElement.remove();
 
-        // Clear the right content
-        clearRightContent();
-      })
-      .catch(error => console.error("Error:", error));
-  }
+                        // Clear the right content
+                        clearRightContent();
+                  })
+                  .catch((error) => console.error("Error:", error));
+      }
 
-  function handleNoteClick(element) {
-    buttonContainer.style.display = 'inline-block';
-    selectNoteElement(element);
-    const noteId = element.dataset.noteId;
-    fetchNoteContent(noteId);
+      function handleNoteClick(element) {
+            buttonContainer.style.display = "inline-block";
+            selectNoteElement(element);
+            const noteId = element.dataset.noteId;
+            fetchNoteContent(noteId);
+      }
 
+      function handleNoteInput() {
+            const saveButton = document.getElementById("saveButton");
+            saveButton.disabled = false;
+      }
 
-  }
+      function handleDeleteButtonClick() {
+            if (selectedElement !== null) {
+                  const noteId = selectedElement.dataset.noteId;
+                  deleteNoteElement(noteId);
+            }
+      }
 
-  function handleNoteInput() {
-    const saveButton = document.getElementById("saveButton");
-    saveButton.disabled = false;
-  }
+      bgBodyElements.forEach((element) => {
+            element.addEventListener("click", () => handleNoteClick(element));
+      });
 
-  function handleDeleteButtonClick() {
-    if (selectedElement !== null) {
-      const noteId = selectedElement.dataset.noteId;
-      deleteNoteElement(noteId);
-    }
-  }
+      deleteButton.addEventListener("click", handleDeleteButtonClick);
 
-  bgBodyElements.forEach(element => {
-    element.addEventListener("click", () => handleNoteClick(element));
-  });
+      const saveButton = document.getElementById("saveButton");
+      saveButton.addEventListener("click", () => {
+            if (selectedElement !== null) {
+                  const noteId = selectedElement.dataset.noteId;
+                  const editedTitle = rightContent.querySelector(".font-bold").textContent;
+                  const editedDate = rightContent.querySelector(".font-bold").textContent;
+                  const editedBody = rightContent.querySelector(
+                        "div > div > div > div > p"
+                  ).innerHTML;
 
-  deleteButton.addEventListener("click", handleDeleteButtonClick);
-
-  const saveButton = document.getElementById("saveButton");
-  saveButton.addEventListener("click", () => {
-    if (selectedElement !== null) {
-      const noteId = selectedElement.dataset.noteId;
-      const editedTitle = rightContent.querySelector(".font-bold").textContent;
-      const editedDate = rightContent.querySelector(".font-bold").textContent;
-      const editedBody = rightContent.querySelector("div > div > div > div > p").innerHTML;
-
-      document.querySelector(`[data-note-id="${noteId}"] > #noteListTitle`).innerText = editedTitle
-      document.querySelector(`[data-note-id="${noteId}"] > #noteListBody`).innerText = editedBody
-      saveNoteContent(noteId, editedTitle, editedBody); 
-      fetchNoteContent(noteId)
-      saveButton.disabled = true;
-    }
-  });
+                  document.querySelector(
+                        `[data-note-id="${noteId}"] > #noteListTitle`
+                  ).innerText = editedTitle;
+                  document.querySelector(
+                        `[data-note-id="${noteId}"] > #noteListBody`
+                  ).innerText = editedBody;
+                  saveNoteContent(noteId, editedTitle, editedBody);
+                  fetchNoteContent(noteId);
+                  saveButton.disabled = true;
+            }
+      });
 });
 
 </script>

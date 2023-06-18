@@ -13,7 +13,7 @@
     @vite('resources/css/app.css')
 </head>
 
-<body>
+<body class="font-poppins">
 
     <div class="m-24 rounded-lg">
         <div id="app" class="flex p-12">
@@ -24,11 +24,11 @@
             </div>
             
             <div class="w-1/2">
-                <main class="p-24">
-                    <h1 class="font-bold text-4xl text-center">My <span class="text-secondary">Notes</span></h1>
+                <main class="p-12">
+                    <h1 class="font-bold text-5xl text-center mb-16">My <span class="text-secondary">Notes</span></h1>
+
                     @yield('content')
-                    <a class="" href="{{ route('login') }}">{{ __('Login') }}</a>
-                    <a class="" href="{{ route('register') }}">{{ __('Register') }}</a>
+
                 </main>
             </div>
         </div>
