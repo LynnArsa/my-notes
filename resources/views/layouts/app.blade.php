@@ -19,7 +19,7 @@
     <div id="app" class="flex">
         
         <div class="w-1/2">
-            <img src="">
+            <img class="bg-contain" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Simple%20BG.png">
         </div>
         <div class="w-1/2 p-24">
             <h1 class="font-bold text-4xl text-center">My <span class="text-secondary">Notes</span></h1>
