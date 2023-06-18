@@ -38,6 +38,7 @@ class HomepageController extends Controller
     {
         $note = Note::findOrFail($noteId);
         $note->title = $request->input('title');
+        $note->date = $request->input('date');
         $note->body = $request->input('body');
 
         $note->save();
@@ -45,6 +46,7 @@ class HomepageController extends Controller
         // Return the updated note data
         return response()->json([
             'title' => $note->title,
+            'date' => $note->date,
             'body' => $note->body,
         ]);
     }

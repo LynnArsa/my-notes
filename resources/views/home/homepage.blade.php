@@ -42,9 +42,9 @@
 
         @foreach ($notes as $note)
             <div class="bg-body w-2/3 mx-auto p-12 m-2 rounded-lg hover:bg-secondary" data-note-id="{{ $note->notes_id }}">
-                <div class="font-bold text-2xl">{{ $note->title }}</div><br>
-                <div class="text-gray">{{ $note->date }}</div> <br>
-                <div class="text-gray truncate">{{ $note->body }}</div> <br>
+                <div id="noteListTitle" class="font-bold text-2xl">{{ $note->title }}</div><br>
+                <div id="noteListDate" class="text-gray">{{ $note->date }}</div> <br>
+                <div id="noteListBody" class="text-gray truncate">{{ $note->body }}</div> <br>
             </div>
         @endforeach
 
@@ -133,6 +133,7 @@ function createNoteElements(note) {
         const bodyElement = rightContent.querySelector("div:nth-child(3)");
         titleElement.addEventListener("input", handleNoteInput);
         bodyElement.addEventListener("input", handleNoteInput);
+        document.querySelector(`[data-note-id="${noteId}"] > #noteListDate`).innerText = note.date
       })
       .catch(error => console.error("Error:", error));
   }
@@ -211,8 +212,13 @@ function createNoteElements(note) {
     if (selectedElement !== null) {
       const noteId = selectedElement.dataset.noteId;
       const editedTitle = rightContent.querySelector(".font-bold").textContent;
+      const editedDate = rightContent.querySelector(".font-bold").textContent;
       const editedBody = rightContent.querySelector("div:nth-child(3)").textContent;
+
+      document.querySelector(`[data-note-id="${noteId}"] > #noteListTitle`).innerText = editedTitle
+      document.querySelector(`[data-note-id="${noteId}"] > #noteListBody`).innerText = editedBody
       saveNoteContent(noteId, editedTitle, editedBody);
+      fetchNoteContent(noteId)
       saveButton.disabled = true;
     }
   });
