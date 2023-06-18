@@ -19,7 +19,6 @@
     <div id="app" class="flex">
         
         <div class="w-1/2">
-            <img class="bg-contain absolute h-[500px] flex items-center justify-center" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Login.png">
             <img class="bg-contain rounded-3xl" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Simple%20BG.png">
         </div>
         <div class="w-1/2 p-24">
