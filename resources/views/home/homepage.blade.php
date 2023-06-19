@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Notes</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
     @vite('resources/css/app.css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
@@ -20,16 +20,16 @@
           </div>
         </div>
         <div class="ml-auto">
-          <div>
-            <p>Hello, {{ $user->name }}</p>
-          </div>
-          <a href="{{ route('logout') }}"
-             onclick="event.preventDefault();
-                          document.getElementById('logout-form').submit();">
-              <div>
-                <img> <p>Logout</p>
+          <div class="flex">
+            <p class="font-bold p-4 text-xl">Hello, {{ $user->name }}</p>
+            <a href="{{ route('logout') }}"
+            onclick="event.preventDefault();
+                      document.getElementById('logout-form').submit();">
+              <div class="px-[35px] py-[16px] bg-secondary rounded-lg">
+                <p class="text-white">Logout</p>
               </div>
-          </a>
+            </a>
+          </div>
           <form id="logout-form" action="{{ route('logout') }}" method="POST">
               @csrf
           </form>
@@ -60,9 +60,7 @@
           </div>
           
           <div id="rightContent">
-            <!-- <div id="editor">
 
-            </div> -->
           </div>
           
           <div class="flex float-right">
@@ -152,12 +150,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         // Reattach event listeners to the new elements
                         const titleElement = rightContent.querySelector(".font-bold");
-                        // const bodyElement = rightContent.querySelector("div:nth-child(3)");
                         titleElement.addEventListener("input", handleNoteInput);
-                        // bodyElement.addEventListener("input", handleNoteInput);
-                        document.querySelector(
-                              `[data-note-id="${noteId}"] > #noteListDate`
-                        ).innerText = note.date;
+                        document.querySelector( `[data-note-id="${noteId}"] > #noteListDate`).innerText = note.date;
                   })
                   .catch((error) => console.error("Error:", error));
       }
@@ -238,19 +232,14 @@ document.addEventListener("DOMContentLoaded", function () {
                   const noteId = selectedElement.dataset.noteId;
                   const editedTitle = rightContent.querySelector(".font-bold").textContent;
                   const editedDate = rightContent.querySelector(".font-bold").textContent;
-                  const editedBody = rightContent.querySelector(
-                        "div > div > div > div > p"
-                  ).innerHTML;
+                  const editedBody = rightContent.querySelector("div > div > div > div > p").innerHTML;
 
                   document.querySelector(
-                        `[data-note-id="${noteId}"] > #noteListTitle`
-                  ).innerText = editedTitle;
+                        `[data-note-id="${noteId}"] > #noteListTitle`).innerText = editedTitle;
                   document.querySelector(
-                        `[data-note-id="${noteId}"] > #noteListBody`
-                  ).innerText = editedBody;
+                        `[data-note-id="${noteId}"] > #noteListBody`).innerText = editedBody;
                   saveNoteContent(noteId, editedTitle, editedBody);
                   fetchNoteContent(noteId);
-                  saveButton.disabled = true;
             }
       });
 });
