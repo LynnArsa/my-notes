@@ -18,12 +18,12 @@
                               </div>
                               <div class="ml-auto">
                                     <div class="flex">
-                                          <p class="font-bold p-4 text-xl">Hello, {{ $user->name }}</p>
+                                          <p class="font-light p-4 text-xl">Hello, <span class="font-bold">{{ $user->name }}</span></p>
                                           <a
                                                 href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
-                                                <div class="px-[35px] py-[16px] bg-secondary rounded-lg">
+                                                <div class="px-[35px] py-[16px] bg-secondary rounded-full hover:bg-primary">
                                                       <p class="text-white">Logout</p>
                                                 </div>
                                           </a>
@@ -50,7 +50,7 @@
 
                   <div class="container w-1/2">
                         <div class="m-16">
-                              <img class="max-w-[400px] mx-auto" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Homepage.png" />
+                              <img class="max-w-[350px] mx-auto" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Homepage.png" />
                               <p class="font-bold text-center text-[32px] pt-12">Capture Your Ideas and Thoughts!</p>
                         </div>
 
@@ -66,16 +66,16 @@
 
                         <div class="flex items-center justify-center">
                               <div id="buttonContainer" class="hidden">
-                                    <button id="deleteButton" type="button" class="px-[50px] py-[16px] bg-red rounded-lg hover:bg-[#]">
+                                    <button id="deleteButton" type="button" class="px-[50px] py-[16px] bg-red rounded-full hover:bg-[#BB1B20]">
                                           <div class="flex">
-                                                <img class="w-[18px] h-[18px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Delete.png" />
-                                                <p class="text-white font-bold px-2">Delete</p>
+                                                <img class="w-[20px] h-[20px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Delete.png" />
+                                                <p class="text-white font-bold px-3">Delete</p>
                                           </div>
                                     </button>
-                                    <button id="saveButton" type="button" class="px-[54px] py-[16px] bg-secondary rounded-lg hover:bg-primary">
+                                    <button id="saveButton" type="button" class="px-[54px] py-[16px] bg-secondary rounded-full hover:bg-primary">
                                           <div class="flex">
                                                 <img class="w-[18px] h-[18px]" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Save.png" />
-                                                <p class="text-white font-bold px-2">Save</p>
+                                                <p class="text-white font-bold px-4">Save</p>
                                           </div>
                                     </button>
                               </div>
@@ -95,6 +95,9 @@ document.addEventListener("DOMContentLoaded", function () {
             titleElement.classList.add("font-bold", "text-2xl");
             titleElement.value = note.title;
             titleElement.contentEditable = "true";
+            titleElement.cols = 81;
+            titleElement.rows = 1;
+            titleElement.maxLength = 25;
 
             const dateElement = document.createElement("div");
             dateElement.classList.add("mb-4", "dateElement");
@@ -103,6 +106,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const bodyElement = document.createElement("textarea");
             bodyElement.value = note.body;
             bodyElement.contentEditable = "true";
+            bodyElement.cols = 120;
+            bodyElement.rows = 13;
 
             return [titleElement, dateElement, bodyElement];
       }
@@ -158,31 +163,30 @@ document.addEventListener("DOMContentLoaded", function () {
                         titleElement.value = data.title;
                         bodyElement.value = data.body;
 
-                        // Perform any necessary actions after saving
                   })
                   .catch((error) => console.error("Error:", error));
       }
 
       function deleteNoteElement(noteId) {
-            fetch(`/notes/${noteId}`, {
-                  method: "DELETE",
-                  headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                  },
-            })
-                  .then((response) => response.json())
-                  .then((data) => {
-                        console.log(data);
-                        // Remove the note element from the sidebar
-                        const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
-                        noteElement.remove();
+      // Remove the note element from the sidebar immediately
+      const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+      noteElement.remove();
+      clearRightContent();
 
-                        // Clear the right content
-                        clearRightContent();
-                  })
-                  .catch((error) => console.error("Error:", error));
-      }
+      fetch(`/notes/${noteId}`, {
+            method: "DELETE",
+            headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            },
+      })
+            .then((response) => response.json())
+            .then((data) => {})
+            .catch((error) => {
+                  console.error("Error:", error);
+            });
+}
+
 
       function handleNoteClick(element) {
             buttonContainer.style.display = "inline-block";

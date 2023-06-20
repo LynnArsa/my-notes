@@ -20,7 +20,6 @@ class HomepageController extends Controller
             ->with('user', $user);
     }
     
-
     // View Note Details
     public function show($noteId)
     {
