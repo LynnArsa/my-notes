@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Note extends Model
 {
@@ -13,11 +15,11 @@ class Note extends Model
     protected $fillable = [
         'title',
         'body',
-        'date'
+        'updated_at'
     ];
     
     protected $table = 'notes';
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function user(): BelongsTo
     {

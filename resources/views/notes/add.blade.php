@@ -39,10 +39,10 @@
     <div class="flex flex-row">
         <div class="container w-1/2  flex flex-col">
             <div class="mx-auto">
-                <input class="p-2 px-96" type="text" name="title" placeholder="">
+                <textarea class="" type="text" name="title" rows="2" cols="120" placeholder="Title" maxlength="25"></textarea>
             </div>
             <div class="mx-auto">
-                <input class="p-48 px-96" type="text" name="body" placeholder="">
+                <textarea class="" type="text" name="body" rows="30" cols="120" placeholder="Body"></textarea>
             </div>
             <div class="mx-auto p-12">
                 <button type="submit" class="px-[55px] py-[16px] bg-secondary rounded-lg flex">
