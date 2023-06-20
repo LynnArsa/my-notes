@@ -23,7 +23,7 @@
                             autofocus />
 
                         @error('name')
-                        <span class="invalid-feedback" role="alert">
+                        <span class="mt-2 text-sm text-red flex" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
@@ -44,7 +44,7 @@
                             autocomplete="email" />
 
                         @error('email')
-                        <span class="invalid-feedback" role="alert">
+                        <span class="mt-2 text-sm text-red flex" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
@@ -64,7 +64,7 @@
                             autocomplete="new-password" />
 
                         @error('password')
-                        <span class="invalid-feedback" role="alert">
+                        <span class="mt-2 text-sm text-red flex" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror

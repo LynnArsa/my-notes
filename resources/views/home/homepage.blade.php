@@ -56,7 +56,7 @@
 
                         <div id="rightContent"></div>
 
-                        <div class="flex float-right">
+                        <div class="fixed bottom-0 right-0 p-16">
                               <a href="{{ url('add') }}">
                                     <button class="bg-body rounded-full p-[20px] hover:bg-secondary">
                                           <img class="max-w-[31px] mx-auto" src="https://raw.githubusercontent.com/LynnArsa/my-notes/main/public/Add%20Black.png" />
