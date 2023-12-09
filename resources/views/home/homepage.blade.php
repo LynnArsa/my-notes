@@ -18,7 +18,7 @@
                               </div>
                               <div class="ml-auto">
                                     <div class="flex">
-                                          <p class="font-light p-4 text-xl">Hello, <span class="font-bold">{{ $user->name }}</span></p>
+                                          <p class="font-light p-4 text-xl">Hi, <span class="font-bold">{{ $user->name }}</span></p>
                                           <a
                                                 href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();
